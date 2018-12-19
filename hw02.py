@@ -462,3 +462,37 @@ else:
 print('Test accuracy: %.2f%%' % (acc2 * 100))
 # print('Test Accuracy: %.2f%%' % (myMLP.score(xtest, ytest) * 100))
 # print('Train Accuracy: %.2f%%' % (myMLP.score(xtrain, ytrain) * 100))
+
+# # Display the decision tree
+
+# In[40]:
+
+
+import sklearn.datasets as datasets
+import pandas as pd
+iris = datasets.load_iris()
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+y = iris.target
+
+
+# In[41]:
+
+
+from sklearn.tree import DecisionTreeClassifier
+dtree = DecisionTreeClassifier()
+dtree.fit(df, y)
+
+
+# In[42]:
+
+
+from sklearn.externals.six import StringIO
+from IPython.display import Image
+from sklearn.tree import export_graphviz
+import pydotplus
+dot_data = StringIO()
+export_graphviz(dtree, out_file=dot_data,
+                filled=True, rounded=True,
+                special_characters=True)
+graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
+Image(graph.create_png())
